@@ -17,30 +17,31 @@ func main() {
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
 
-	// 3. 声明消息要发送到的队列
-	q, err := ch.QueueDeclare(
-		"task_queue", // name
-		true,   // durable 声明为持久队列
-		false,   // delete when unused
-		false,   // exclusive
-		false,   // no-wait
-		nil,     // arguments
+	err = ch.ExchangeDeclare(
+		"logs",   // name
+		"fanout", // type
+		true,     // durable
+		false,    // auto-deleted
+		false,    // internal
+		false,    // no-wait
+		nil,      // arguments
 	)
-	failOnError(err, "Failed to declare a queue")
+	failOnError(err, "Failed to declare an exchange")
 
 	body := bodyFrom(os.Args)  // 从参数中获取要发送的消息正文
 	// 4.将消息发布到声明的队列
 	err = ch.Publish(
-		"",     // exchange
-		q.Name, // routing key
+		"logs",     // exchange
+		"", // routing key
 		false,  // mandatory
 		false,  // immediate
 		amqp.Publishing{
-			DeliveryMode: amqp.Persistent, // 持久（交付模式：瞬态/持久）
 			ContentType: "text/plain",
 			Body:        []byte(body),
 		})
 	failOnError(err, "Failed to publish a message")
+
+	log.Printf(" [x] Sent %s", body)
 }
 
 func bodyFrom(args []string) string {
