@@ -27,8 +27,8 @@ func main() {
 
 	// 声明队列
 	q, err := ch.QueueDeclare(
-		"hello", // name
-		false,   // durable
+		"task_queue", // name
+		true,   // durable
 		false,   // delete when unused
 		false,   // exclusive
 		false,   // no-wait
@@ -73,3 +73,8 @@ func main() {
 	log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
 	<-forever
 }
+
+/*数据持久化
+如果消费者收到消息时autoAck为true，但消费端还没处理完就宕机，在这种情况下消息数据还是丢失了
+在这种场景下需要把atupAck设为false，并在消费逻辑完成之后再手动去确认。（如果没有确认，Broker会把消息发送给其他消费者）
+*/
