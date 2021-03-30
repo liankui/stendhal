@@ -8,11 +8,11 @@ import (
 	"time"
 )
 
-func failOnError(err error, msg string) {
-	if err != nil {
-		log.Fatalf("%s: %s", msg, err)
-	}
-}
+/*
+消息预取
+设置预取数量 Prefetch Count 限制消费者在收到下一确认回执前执行一次醉倒可以就少多少条消息。
+如：Prefetch Count=1 表示RabbitMQ服务器每次给每个消费者发送一条消息，在收到该消费Ack指令之前RabbitMQ不会再向该消费者发送新的消息。
+*/
 
 func main() {
 	// 建立连接
@@ -74,7 +74,8 @@ func main() {
 	<-forever
 }
 
-/*数据持久化
-如果消费者收到消息时autoAck为true，但消费端还没处理完就宕机，在这种情况下消息数据还是丢失了
-在这种场景下需要把atupAck设为false，并在消费逻辑完成之后再手动去确认。（如果没有确认，Broker会把消息发送给其他消费者）
-*/
+func failOnError(err error, msg string) {
+	if err != nil {
+		log.Fatalf("%s: %s", msg, err)
+	}
+}

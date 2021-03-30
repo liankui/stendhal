@@ -7,6 +7,18 @@ import (
 	"strings"
 )
 
+/*
+数据持久化，包含3类持久化
+Queue持久化，durable=true
+Message持久化，deliveryMode=2 （只有Queue持久化，服务器重启Queue后，没发出去的消息会丢失）
+Exchange持久化，durable=true todo 这里没看到在哪里设置了？
+出现的场景问题：
+如果消费者收到消息时autoAck为true，但消费端还没处理完就宕机，在这种情况下消息数据还是丢失了
+在这种场景下需要把atupAck设为false，并在消费逻辑完成之后再手动去确认。（如果没有确认，Broker会把消息发送给其他消费者）
+
+*/
+
+
 func main() {
 	// 1. 尝试连接RabbitMQ，建立连接
 	// 该连接抽象了套接字连接，并为我们处理协议版本协商和认证等。
