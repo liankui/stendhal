@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -8,11 +9,10 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func failOnError(err error, msg string) {
-	if err != nil {
-		log.Fatalf("%s: %s", msg, err)
-	}
-}
+/*
+Exchange 为 direct
+消息中的路由键（routing key）和 Binding 中的绑定键（binding key）一致，交换器就将消息发送到对应的队列中，是完全匹配-单播的模式。
+*/
 
 func main() {
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
@@ -56,6 +56,7 @@ func bodyFrom(args []string) string {
 	} else {
 		s = strings.Join(args[2:], " ")
 	}
+	fmt.Println("s:", s)
 	return s
 }
 
@@ -67,4 +68,10 @@ func severityFrom(args []string) string {
 		s = os.Args[1]
 	}
 	return s
+}
+
+func failOnError(err error, msg string) {
+	if err != nil {
+		log.Fatalf("%s: %s", msg, err)
+	}
 }

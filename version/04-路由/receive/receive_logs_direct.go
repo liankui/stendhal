@@ -7,11 +7,11 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func failOnError(err error, msg string) {
-	if err != nil {
-		log.Fatalf("%s: %s", msg, err)
-	}
-}
+/*
+运行命令：
+go run receive_logs_direct.go info 建立一个队列，bind1种关键字 info 的消息
+go run receive_logs_direct.go info warning error 建立一个队列，bind3种关键字 info warning error 的消息
+*/
 
 func main() {
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
@@ -82,8 +82,8 @@ func main() {
 	<-forever
 }
 
-/*
-运行命令：
-go run receive_logs_direct.go info warning error
-建立一个队列，bind3种关键字（info warning error）的消息
-*/
+func failOnError(err error, msg string) {
+	if err != nil {
+		log.Fatalf("%s: %s", msg, err)
+	}
+}
