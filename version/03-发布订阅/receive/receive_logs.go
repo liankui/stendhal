@@ -5,6 +5,12 @@ import (
 	"log"
 )
 
+/*
+QueueDeclare 中，如果传递一个空字符串作为队列名称时，将生成一个随机名称的非持久队列
+
+QueueBind ，队列绑定"logs"交换器
+*/
+
 func failOnError(err error, msg string) {
 	if err != nil {
 		log.Fatalf("%s: %s", msg, err)
