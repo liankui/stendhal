@@ -1,3 +1,2 @@
 # stendhal
-the micro projcet
-111
+rabbitmq practice
