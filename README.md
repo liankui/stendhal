@@ -1,2 +1,2 @@
 # stendhal
-rabbitmq practice
+go rabbitmq practice
